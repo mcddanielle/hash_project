@@ -10,6 +10,18 @@ rewrite the code so you read the values into a hash,
 eliminating the need to rewrite everything when you change the parameter file
 """
 
+"""
+Shannon Gallagher
+July 25, 2019
+
+Portable code for reading parameter files in the McDermott lab
+
+Added dictionary function to allow for greater flexibitily in parameter file
+formats
+
+
+"""
+
 import csv, sys
 #####################################################
 #simple ascii text reader
@@ -26,7 +38,7 @@ def import_text(filename, separator):
             if line[0].startswith("#"):
                 continue #print("")
             elif line:
-                #print line
+                #print (type(line))
                 yield line
     return
 
@@ -55,6 +67,7 @@ def get_input_data(filename):
             for data in import_text(filename,' '):
                 #print(data)
                 input_data_strings.append(data)
+            
                 
         except:
             print("File read error")
@@ -66,73 +79,38 @@ def get_input_data(filename):
         print("Either hardcode your parameters or write a new subroutine")
         sys.exit()
         
+    dict={}
+    for i in range(0,len(input_data_strings)):
+        try:
+            float(input_data_strings[i][1])
+            if '.' in input_data_strings[i][1]:
+                dict[input_data_strings[i][0]] = float(input_data_strings[i][1])
+            else:
+                dict[input_data_strings[i][0]] = int(input_data_strings[i][1])
+        except ValueError:
+                dict[input_data_strings[i][0]] = str(input_data_strings[i][1])
+    
+        
+            
+    # here are the features which the origninal code states are equivalent
+    if filename == "Pcw0":
+        dict['maxtime'] = dict['tot_time']
+        dict['writemovietime'] =dict['writemovie']
+    
+
+    # here are the feaures which are unchanging
+    if filename == "Pcw0":
+        dict['dt' ]= 0.01
+        dict['radius'] = 1.0
+    
+
     if filename == "Pa0":
-
-        density          = float(input_data_strings[0][1])
-        #small_density    = float(input_data_strings[1][1])
-        #large_density    = float(input_data_strings[2][1])
-        pdensity         = float(input_data_strings[1][1])
+        return(dict['SX'], dict['SY'], dict['radius'], dict['maxtime'], dict['writemovietime'])
+    if filename == "Pcw0":
+        return(dict['SX'], dict['SY'], dict['radius'], dict['maxtime'], dict['writemovietime'], dict['drop'], dict['dt'])
         
-        Sx               = [0.0,float(input_data_strings[2][1])]
-        Sy               = [0.0,float(input_data_strings[3][1])]
         
-        radius           = float(input_data_strings[4][1])
-        #large_radius     = float(input_data_strings[7][1])
-        runtime          = int(  input_data_strings[5][1])
-        runforce         = float(input_data_strings[6][1])
-        dt               = float(input_data_strings[7][1])
-        
-        maxtime          = int(input_data_strings[8][1])
-        writemovietime   = int(input_data_strings[9][1])
-        
-        kspring          = float(input_data_strings[10][1])
-        lookupcellsize   = float(input_data_strings[11][1])
-        potentialrad     = float(input_data_strings[12][1])
-        potentialmag     = float(input_data_strings[13][1])
-        lengthscale      = float(input_data_strings[14][1])
-        drivemag         = float(input_data_strings[15][1])
-        drivefrq         = float(input_data_strings[16][1])
-        decifactor       = int(  input_data_strings[17][1])
-        restart          = int(  input_data_strings[18][1])
-        drive_step_time  = int(  input_data_strings[19][1]) 
-        drive_step_force = float(input_data_strings[20][1])
-
-
-        return(Sx, Sy, radius, maxtime, writemovietime )
-
-    elif filename == "Pcw0":
-        id_str       = str(input_data_strings[0][1])
-        Sx           = [0.0,float(input_data_strings[1][1])]
-        Sy           = [0.0,float(input_data_strings[2][1])]
-        
-        nV           = int(  input_data_strings[3][1])
-        f_p          = float(input_data_strings[4][1])
-        tot_trough   = int(  input_data_strings[5][1])
-        drop         = int(  input_data_strings[6][1])
-        dc_current   = float(input_data_strings[7][1])
-        dc_curr_incr = float(input_data_strings[8][1])
-        dc_maxcurr   = float(input_data_strings[9][1])
-        
-        Temperature  = float(input_data_strings[10][1])
-        temp_incr    = float(input_data_strings[11][1])
-        maxtemper    = float(input_data_strings[12][1])
-        tot_time     = int(  input_data_strings[13][1])
-        restart      = int(  input_data_strings[14][1])
-        A_v          = float(input_data_strings[15][1])
-        decifactor   = int(  input_data_strings[16][1])
-        writemovie   = int(  input_data_strings[17][1])
-        bstrength    = float(input_data_strings[18][1])
-        ac_current   = float(input_data_strings[19][1])
-        ac_frequency = float(input_data_strings[20][1])
-        drivenid     = int(  input_data_strings[21][1])
-
-        radius = 1.0 #hardwired (it isn't well defined in colloid system)
-        maxtime = tot_time
-        writemovietime = writemovie
-
-        dt=0.01 #hardwired in MD code
-        
-        return(Sx, Sy, radius, maxtime, writemovietime, drop, dt )
+    
     
     else:
         print("TBD")

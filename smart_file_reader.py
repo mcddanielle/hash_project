@@ -78,16 +78,28 @@ def get_input_data(filename):
         print("Code is not written to understand your input file")
         print("Either hardcode your parameters or write a new subroutine")
         sys.exit()
-        
-    dict={}
+
+    
+    dict={} # creates an empty dictionary to add parameters
+
+    # Input data strings is a list of lists.
+    # For list within the total list, the first string value is
+    # set as a key in the dictionary, and the second value is set
+    # as the value for that key.  
+    
     for i in range(0,len(input_data_strings)):
+    # for each line in the input data strings list
         try:
             float(input_data_strings[i][1])
+            # Attempts to convert to float to test if it is a number
             if '.' in input_data_strings[i][1]:
+                # Tests for period to see if float
                 dict[input_data_strings[i][0]] = float(input_data_strings[i][1])
             else:
+                # if it is not a float and it is a number it is an integer
                 dict[input_data_strings[i][0]] = int(input_data_strings[i][1])
         except ValueError:
+            # If we cannot convert to a float it must be a string
                 dict[input_data_strings[i][0]] = str(input_data_strings[i][1])
     
         

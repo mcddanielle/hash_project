@@ -1,7 +1,7 @@
-## hash_project
+## hash_project (solved!)
 ### Repository contains the following
 #### python codes
-* `dumb_file_reader.py`: the primary code for reading the information
+* `smart_file_reader.py`: the new improved dict powered code for reading the information
 * `pa0_parser.py`: simple demo of reading a Pa0 file
 * `pcw0_parser.py`: simple demo of reading a Pcw0 file
 
@@ -10,7 +10,7 @@
 * Pcw0
 
 #### Project:
-rewrite the dumb_file_reader with a smarter data handling technique, such as a hash, so that you don't need to specify whether it is file type Pcw0, Pa0, or anything else, AND importantly, you don't have to change the file reader every time you change the parameter file
+Shannon has successfully rewritten the dumb_file_reader with a smarter data handling technique, using the python version of a hash, a dict.  Now it isn't necessary to specify file type Pcw0, Pa0.  Now, you don't have to change the file reader every time you change the parameter file!
 
 #### How to get involved:
 
